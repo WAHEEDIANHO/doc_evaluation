@@ -6,8 +6,6 @@ export type DocEnvDocument = HydratedDocument<DocEnv>
 
 @Schema()
 export class DocEnv {
-  @Prop()
-  phone_number: string
   @Prop({type: String, unique: true, required: true})
   email: string
   @Prop()
@@ -19,23 +17,23 @@ export class DocEnv {
   @Prop()
   no_of_year_experience: number
   @Prop()
-  recognize_price_award?: string
+  recognize_price_award?: boolean
   @Prop()
-  no_of_recognize_price?: string
+  no_of_recognize_price?: number
   @Prop()
-  evidence_membership_assoc?: string
+  evidence_membership_assoc?: boolean
   @Prop()
-  no_evidence_membership_assoc?: string
+  no_evidence_membership_assoc?: number
   @Prop()
-  evidence_published_material?: string
+  evidence_published_material?: boolean
   @Prop()
-  no_published_material?: string
+  no_published_material?: number
   @Prop()
   judge_other_work: boolean
   @Prop()
   no_of_work_judged: number
   @Prop()
-  business_related_contribution?: string
+  business_related_contribution?: boolean
   @Prop()
   no_business_related_contribution?: number
   @Prop()
