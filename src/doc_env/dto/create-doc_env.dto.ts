@@ -19,23 +19,23 @@ export class CreateDocEnvDto {
   @ApiProperty()
   no_of_year_experience: number
   @ApiProperty()
-  recognize_price_award?: string
+  recognize_price_award?: boolean
   @ApiProperty()
-  no_of_recognize_price?: string
+  no_of_recognize_price?: number
   @ApiProperty()
-  evidence_membership_assoc?: string
+  evidence_membership_assoc?: boolean
   @ApiProperty()
-  no_evidence_membership_assoc?: string
+  no_evidence_membership_assoc?: number
   @ApiProperty()
-  evidence_published_material?: string
+  evidence_published_material?: boolean
   @ApiProperty()
-  no_published_material?: string
+  no_published_material?: number
   @ApiProperty()
   judge_other_work: boolean
   @ApiProperty()
   no_of_work_judged: number
   @ApiProperty()
-  business_related_contribution?: string
+  business_related_contribution?: boolean
   @ApiProperty()
   no_business_related_contribution?: number
   @ApiProperty()
