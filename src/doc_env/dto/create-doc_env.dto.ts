@@ -54,4 +54,8 @@ export class CreateDocEnvDto {
   published_material_in_profession: boolean
   @ApiProperty()
   no_published_material_in_profession?: number
+  @ApiProperty()
+  performed_leading_role: boolean
+  @ApiProperty()
+  cv_upload_url: string
 }

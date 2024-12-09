@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DocEnvModule } from './doc_env/doc_env.module';
+import { FileUploadModule } from './file-upload/file-upload.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -15,7 +16,7 @@ import { DocEnvModule } from './doc_env/doc_env.module';
     useFactory: async (configService: ConfigService) => ({
       uri: configService.get('DATABASE_URL')
     })
-  }), DocEnvModule],
+  }), DocEnvModule, FileUploadModule],
   controllers: [AppController],
   providers: [AppService],
 })

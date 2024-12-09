@@ -52,7 +52,10 @@ export class DocEnv {
   published_material_in_profession: boolean
   @Prop()
   no_published_material_in_profession?: number
-  
+  @Prop()
+  cv_upload_url: string
+  @Prop()
+  performed_leading_role: boolean
 }
 
 
