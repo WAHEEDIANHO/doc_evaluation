@@ -4,9 +4,9 @@ import { IsEmail, IsString } from 'class-validator';
 export class CreateDocEnvDto {
   // @ApiProperty()
   // userId: string;
-  @ApiProperty()
-  @IsString()
-  phone_number: string
+  // @ApiProperty()
+  // @IsString()
+  // phone_number: string
   @ApiProperty()
   @IsEmail()
   email: string
