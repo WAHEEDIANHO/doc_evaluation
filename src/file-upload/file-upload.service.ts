@@ -7,9 +7,9 @@ export class FileUploadService {
   
   constructor(private readonly configService: ConfigService) {
     cloudinary.config({
-      cloud_name: 'dvhiikuch',
-      api_key: '695182958177239',
-      api_secret: 'oByJzH5Es1sEfPdobwuEnXpk7ek'
+      cloud_name: configService.get("CLOUDINARY_NAME"),
+      api_key: configService.get("CLOUDINARY_API_KEY"),
+      api_secret: configService.get("API_SECRET")
     })
   }
   getFileUploader() {
