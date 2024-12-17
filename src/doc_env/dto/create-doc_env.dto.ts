@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsString } from 'class-validator';
 
 export class CreateDocEnvDto {
@@ -58,4 +58,12 @@ export class CreateDocEnvDto {
   performed_leading_role: boolean
   @ApiProperty()
   cv_upload_url: string
+}
+
+
+export class QueryDto {
+  @ApiPropertyOptional()
+  email: string;
+  @ApiPropertyOptional()
+  _id: string;
 }

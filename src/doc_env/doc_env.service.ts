@@ -24,6 +24,10 @@ export class DocEnvService {
     return await this.docEnvModel.findOne({email}).exec();
   }
 
+  async findById(id: string) {
+    return await this.docEnvModel.findById(id).exec();
+  }
+
   // update(id: number, updateDocEnvDto: UpdateDocEnvDto) {
   //   return `This action updates a #${id} docEnv`;
   // }
