@@ -4,15 +4,21 @@ import { UpdateDocEnvDto } from './dto/update-doc_env.dto';
 import { DocEnv } from './entities/doc_env.entity';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { MailerService } from '@nestjs-modules/mailer';
+import { MailerserviceService } from '../mailerservice/mailerservice.service';
 
 @Injectable()
 export class DocEnvService {
   
-  constructor(@InjectModel(DocEnv.name) private docEnvModel: Model<DocEnv>) { 
+  constructor(
+    @InjectModel(DocEnv.name) private docEnvModel: Model<DocEnv>,
+    private readonly mailerService: MailerserviceService
+    ) { 
   }
   
-  create(createDocEnvDto: CreateDocEnvDto) {
+  async create(createDocEnvDto: CreateDocEnvDto) {
     const doc_env =  new this.docEnvModel(createDocEnvDto);
+    this.mailerService.sendMail(doc_env.email);
     return doc_env.save();
   }
 
