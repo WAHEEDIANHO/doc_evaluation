@@ -14,17 +14,21 @@ export class MailerserviceService {
     ) {}
   
   async sendMail (email: string) {
-    // console.log(process.cwd() + "current")
-    const template: string = await this.renderTemplateFile(email);
-    // console.log(template)
-    await this.mailerService.sendMail({
-      to: "info@elitepetitions.com", //"waheedianho65@gmail.com" gran24jefe10@gmail.com,
-      from: 'noreply@elitepetition.com', // sender address
-      subject: 'Document Evalaution Entry', // Subject line
-      // text: 'welcome', // plaintext body
-      html: template, // HTML body content
-    })
-    // console.log("mail sent successfully")
+    try {
+      // console.log(process.cwd() + "current")
+      const template: string = await this.renderTemplateFile(email);
+      // console.log(template)
+      await this.mailerService.sendMail({
+        to: "wsafiu454@stu.ui.edu.ng", //"info@elitepetitions.com waheedianho65@gmail.com" gran24jefe10@gmail.com,
+        from: 'noreply@elitepetition.com', // sender address
+        subject: 'Document Evalaution Entry', // Subject line
+        // text: 'welcome', // plaintext body
+        html: template, // HTML body content
+      })
+      console.log("mail sent successfully")
+    }catch (e) {
+      console.log("error sending mail", e);
+    }
   }
   
   private async renderTemplateFile(email: string): Promise<string> {
