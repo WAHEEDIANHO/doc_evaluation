@@ -19,9 +19,9 @@ export class MailerserviceService {
       const template: string = await this.renderTemplateFile(email);
       // console.log(template)
       await this.mailerService.sendMail({
-        to: "wsafiu454@stu.ui.edu.ng", //"info@elitepetitions.com waheedianho65@gmail.com" gran24jefe10@gmail.com,
-        from: 'noreply@elitepetition.com', // sender address
-        subject: 'Document Evalaution Entry', // Subject line
+        to: "info@elitepetitions.com", //"info@elitepetitions.com waheedianho65@gmail.com" gran24jefe10@gmail.com,
+        // from: 'noreply@elitepetition.com', // sender address
+        subject: 'Document Evaluation Entry', // Subject line
         // text: 'welcome', // plaintext body
         html: template, // HTML body content
       })
