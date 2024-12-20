@@ -18,8 +18,10 @@ export class DocEnvService {
   
   async create(createDocEnvDto: CreateDocEnvDto) {
     const doc_env =  new this.docEnvModel(createDocEnvDto);
-    this.mailerService.sendMail(doc_env.email);
-    return doc_env.save();
+    const doc = await doc_env.save();
+    // console.log(doc.email)
+    this.mailerService.sendMail(doc.email);
+    return doc;
   }
 
   async findAll(query: { [key: string]: any }): Promise<DocEnv[]> {
