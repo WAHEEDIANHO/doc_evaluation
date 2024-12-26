@@ -6,7 +6,7 @@ export type DocEnvDocument = HydratedDocument<DocEnv>
 
 @Schema()
 export class DocEnv {
-  @Prop({type: String, unique: true, required: true})
+  @Prop({type: String, required: true})
   email: string
   @Prop()
   category_petitioning_for: string

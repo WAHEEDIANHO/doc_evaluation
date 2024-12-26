@@ -13,13 +13,14 @@ export class MailerserviceService {
     private readonly configService: ConfigService
     ) {}
   
-  async sendMail (email: string) {
+  async sendMail (id: string) {
     try {
       // console.log(process.cwd() + "current")
-      const template: string = await this.renderTemplateFile(email);
+      const template: string = await this.renderTemplateFile(id);
       // console.log(template)
       await this.mailerService.sendMail({
         to: "info@elitepetitions.com", //"info@elitepetitions.com waheedianho65@gmail.com" gran24jefe10@gmail.com,
+        // to: "waheedianho65@gmail.com", //"info@elitepetitions.com waheedianho65@gmail.com" gran24jefe10@gmail.com,
         // from: 'noreply@elitepetition.com', // sender address
         subject: 'Document Evaluation Entry', // Subject line
         // text: 'welcome', // plaintext body
@@ -31,10 +32,10 @@ export class MailerserviceService {
     }
   }
   
-  private async renderTemplateFile(email: string): Promise<string> {
+  private async renderTemplateFile(id: string): Promise<string> {
     return  await ejs.renderFile(path.join(process.cwd() + "/src/mailerservice/template", 'mail.ejs') , {
       baseUrl: this.configService.get<string>("CLIENT_URL"),
-      email
+      id
     });
   }
 }

@@ -18,9 +18,9 @@ export class DocEnvService {
   
   async create(createDocEnvDto: CreateDocEnvDto) {
     const doc_env =  new this.docEnvModel(createDocEnvDto);
-    const doc = await doc_env.save();
+    const doc: any = await doc_env.save();
     // console.log(doc.email)
-    this.mailerService.sendMail(doc.email);
+    this.mailerService.sendMail(doc._id);
     return doc;
   }
 

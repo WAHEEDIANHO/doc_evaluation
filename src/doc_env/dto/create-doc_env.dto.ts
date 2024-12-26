@@ -8,7 +8,7 @@ export class CreateDocEnvDto {
   // @IsString()
   // phone_number: string
   @ApiProperty()
-  @IsEmail()
+  @IsEmail({}, {message: "Invalid email"})
   email: string
   @ApiProperty()
   category_petitioning_for: string

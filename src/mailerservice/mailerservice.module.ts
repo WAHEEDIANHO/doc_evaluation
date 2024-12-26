@@ -14,7 +14,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
         transport: `smtps://${configService.get<string>('MAILER_SMTP_HOST')}:${configService.get<string>('MAILER_SMTP_KEY')}@smtp.gmail.com`,//fyahqabttxaiejet
         // transport: "smtps://user@domain.com:pass@smtp.domain.com",
         defaults: {
-          from: '"nest-modules" <noreply@localhost>'
+          from: '"elite-petitions" <noreply@localhost>'
         },
         template: {
           // dir: process.cwd() + '/src/template',
