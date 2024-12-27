@@ -22,16 +22,16 @@ export class DocEnvController {
     return res.status(HttpStatus.OK).json(docs)
   }
 
-  @Get(':email')
-  async findOne(@Res() res: Response, @Param('email') email: string) {
-    const doc = await this.docEnvService.findOne(email);
-    return res.status(HttpStatus.OK).json(doc);
-  }
+  // @Get(':email')
+  // async findOne(@Res() res: Response, @Param('email') email: string) {
+  //   const doc = await this.docEnvService.findOne(email);
+  //   return res.status(HttpStatus.OK).json(doc);
+  // }
 
 
   @Get(':id')
-  async findById(@Res() res: Response, @Param('id') email: string) {
-    const doc = await this.docEnvService.findById(email);
+  async findById(@Res() res: Response, @Param('id') id: string) {
+    const doc = await this.docEnvService.findById(id);
     return res.status(HttpStatus.OK).json(doc);
   }
   
