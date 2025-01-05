@@ -3,6 +3,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 // import { Prop } from '@nestjs/swagger';
 
 export type DocEnvDocument = HydratedDocument<DocEnv>
+export enum   Status {
+  PENDING = "pending",
+  APPROVED = "approved",
+  REJECTED = "rejected"
+}
 
 @Schema()
 export class DocEnv {
@@ -56,6 +61,8 @@ export class DocEnv {
   cv_upload_url: string
   @Prop()
   performed_leading_role: boolean
+  @Prop({type: String, enum: Object.values(Status), default: Status.PENDING})
+  status: Status
 }
 
 

@@ -5,10 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DocEnvModule } from './doc_env/doc_env.module';
 import { FileUploadModule } from './file-upload/file-upload.module';
-import { MailerModule, MailerService } from '@nestjs-modules/mailer';
-import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
-import { MailerserviceModule } from './mailerservice/mailerservice.module';
-import * as process from 'node:process';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -23,7 +20,8 @@ import * as process from 'node:process';
     })
   }), 
     DocEnvModule, 
-    FileUploadModule,
+    FileUploadModule, AuthModule, 
+    // UserModule
     // MailerserviceModule,
     // MailerModule
   ],

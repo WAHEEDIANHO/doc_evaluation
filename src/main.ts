@@ -16,6 +16,7 @@ async function bootstrap() {
     .setTitle("DOc Evaluation")
     .setDescription("")
     .setVersion("1.0")
+    .addBearerAuth()
     .build();
   
   const docs = SwaggerModule.createDocument(app,  config);
