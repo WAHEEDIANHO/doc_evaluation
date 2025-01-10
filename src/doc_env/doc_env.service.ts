@@ -21,6 +21,7 @@ export class DocEnvService {
     const doc: any = await doc_env.save();
     // console.log(doc.email)
     this.mailerService.sendMail(doc._id);
+    this.mailerService.submissionConfirmationLink(doc._id, {email: doc.email});
     return doc;
   }
 
@@ -40,8 +41,13 @@ export class DocEnvService {
     const doc: any = await this.docEnvModel.findById(id);
     if(doc == null) return;
     await this.docEnvModel.findByIdAndUpdate(id, {status: updateDocEnvDto.status}).exec();
+    // console.log(updateDocEnvDto.status, Status.APPROVED.toString())
     if (updateDocEnvDto.status == Status.APPROVED) {
-      this.mailerService.sendMail(doc.email);
+      console.log("update")
+      // this.mailerService.sendMail(doc.email);
+      this.mailerService.sendConfirmationMail(id,  {email: doc.email});
+    }else if (updateDocEnvDto.status == Status.REJECTED) {
+      console.log("rejected");
     }
     return;
     // return `This action updates a #${id} docEnv`;

@@ -4,9 +4,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type DocEnvDocument = HydratedDocument<DocEnv>
 export enum   Status {
-  PENDING = "pending",
-  APPROVED = "approved",
-  REJECTED = "rejected"
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED"
 }
 
 @Schema()
