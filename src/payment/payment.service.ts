@@ -83,6 +83,8 @@ export class PaymentService {
 
   async handleWebhookEvent(req: Request): Promise<void> {
     const sig = req.headers['stripe-signature'];
+    console.log(sig)
+    console.log("secret-hook", this.configService.get('WEBHOOK_SIGNING_SECRET'))
     const endpointSecret = this.configService.get('WEBHOOK_SIGNING_SECRET');
 
     try {
