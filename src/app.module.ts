@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { DocEnvModule } from './doc_env/doc_env.module';
 import { FileUploadModule } from './file-upload/file-upload.module';
 import { AuthModule } from './auth/auth.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -20,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
     })
   }), 
     DocEnvModule, 
-    FileUploadModule, AuthModule, 
+    FileUploadModule, AuthModule, PaymentModule, PaymentModule
     // UserModule
     // MailerserviceModule,
     // MailerModule

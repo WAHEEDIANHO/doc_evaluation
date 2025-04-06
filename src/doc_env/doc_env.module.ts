@@ -12,5 +12,6 @@ import { AppResponseDto } from '../app.response.dto';
   imports: [AuthModule, UtilsModule, MongooseModule.forFeature([{name: DocEnv.name, schema: DocEnvSchema}]), MailerserviceModule],
   controllers: [DocEnvController],
   providers: [DocEnvService, AppResponseDto],
+  exports:[DocEnvService, MongooseModule.forFeature([{name: DocEnv.name, schema: DocEnvSchema}])],
 })
 export class DocEnvModule {}

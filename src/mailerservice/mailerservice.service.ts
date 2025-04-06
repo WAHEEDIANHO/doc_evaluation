@@ -16,7 +16,7 @@ export class MailerserviceService {
   async sendMail (id: string) {
     try {
       // console.log(process.cwd() + "current")
-      const template: string = await this.renderTemplateFile(id);
+      const template: string = await this.renderTemplateFile({id: id});
       await this.mail("info@elitepetitions.com", template)
       // console.log(template)
       console.log("mail sent successfully")
@@ -26,21 +26,27 @@ export class MailerserviceService {
   }
   
   async sendConfirmationMail (id: string, data?: { [key: string]: any }) {
-    const template: string = await this.renderTemplateFile(id, "confirm.ejs");
+    const template: string = await this.renderTemplateFile({ id }, "confirm.ejs");
     await this.mail(data.email, template, "Evaluation Status");
     console.log("mail sent successfully")
   }
 
   async submissionConfirmationLink (id: string, data?: { [key: string]: any }) {
-    const template: string = await this.renderTemplateFile(id, "sconfirm.ejs");
+    const template: string = await this.renderTemplateFile({ id }, "sconfirm.ejs");
     await this.mail(data.email, template, "Evaluation Status");
     console.log("mail sent successfully")
   }
   
-  private async renderTemplateFile(id: string, template?: string): Promise<string> {
+  async sendPaymentLink (email: string, links?: { [key: string]: any }[]) {
+    const template: string = await this.renderTemplateFile({ links }, "payment.ejs");
+    await this.mail(email, template, "Payment Link");
+    console.log("mail sent successfully")
+  }
+  
+  private async renderTemplateFile(data: any, template?: string): Promise<string> {
     return  await ejs.renderFile(path.join(process.cwd() + "/src/mailerservice/template", `${ template || 'mail.ejs'}`) , {
       baseUrl: this.configService.get<string>("CLIENT_URL"),
-      id
+      ...data
     });
   }
   
