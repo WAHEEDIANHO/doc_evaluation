@@ -22,8 +22,7 @@ import { ApiBearerAuth, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 
 
-@ApiBearerAuth()
-@UseGuards(AuthGuard)
+
 @Controller('payment')
 export class PaymentController {
   
@@ -33,8 +32,9 @@ export class PaymentController {
     private readonly docEnvService: DocEnvService,
     private readonly configService: ConfigService
     ) {}
-  
-  
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)  
   @Post('create-installment')
   async createInstallment(@Res() res: Response, @Req() @Body(new ValidationPipe) req: CreateInstallmentDto): Promise<Response> {
     const { amount, no_of_installment, clientId } = req;
@@ -100,7 +100,9 @@ export class PaymentController {
     return res.status(200).json({ message: 'Webhook received' });
     
   }
-  
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('get-payment/:documentId')
   async getPaymentByDoc(@Res() res: Response, @Param('documentId') documentId: string): Promise<Response> {
       if (!documentId) throw new BadRequestException('documentId is required');
@@ -108,7 +110,10 @@ export class PaymentController {
       if (!payment) throw new NotFoundException(`Document with ID ${documentId} have no payment`);
       return res.status(200).json({ message: 'Payment', data: payment });
   }
-  
+
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('get-payment-installments/:paymentId')
   async getPaymentInstallment(@Res() res: Response, @Param('paymentId') paymentId: string): Promise<Response> {
     // const paymentId: string = req.params.id;
