@@ -94,8 +94,8 @@ export class PaymentController {
   
   @ApiExcludeEndpoint()
   @Post('webhook')
-  async handleWebhook(@Res() res: Response, @Req() req: Request): Promise<Response> {
-    console.log('Webhook received:', req.headers);    
+  async handleWebhook(@Req() req: Request, @Res() res: Response): Promise<Response> {
+    console.log('Webhook received, signature ', req.headers['stripe-signature']);    
     await this.paymentService.handleWebhookEvent(req);
     return res.status(200).json({ message: 'Webhook received' });
     

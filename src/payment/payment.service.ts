@@ -82,7 +82,7 @@ export class PaymentService {
   }
 
   async handleWebhookEvent(req: Request): Promise<void> {
-    const sig = req.headers['stripe-signature'];
+    const sig = req.headers['stripe-signature'] as string;
     console.log(sig)
     console.log("secret-hook", this.configService.get('WEBHOOK_SIGNING_SECRET'))
     const endpointSecret = this.configService.get('WEBHOOK_SIGNING_SECRET');
@@ -90,6 +90,10 @@ export class PaymentService {
     try {
       const event = this.stripeService.getStripe().webhooks.constructEvent(req.body, sig, endpointSecret);
       console.log('Webhook event received:', event);
+
+      console.log('Body type:', typeof req.body); // should be object (Buffer)
+      // console.log('Is buffer?', Buffer.isBuffer(req.body)); // should be true
+
 
       // Handle the event
       switch (event.type) {
