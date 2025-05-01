@@ -20,6 +20,7 @@ import { MailerserviceService } from '../mailerservice/mailerservice.service';
 import { DocEnvService } from '../doc_env/doc_env.service';
 import { ApiBearerAuth, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
+import { PaymentStatus } from './entitities/payment';
 
 
 
@@ -37,7 +38,7 @@ export class PaymentController {
   @UseGuards(AuthGuard)  
   @Post('create-installment')
   async createInstallment(@Res() res: Response, @Req() @Body(new ValidationPipe) req: CreateInstallmentDto): Promise<Response> {
-    const { amount, no_of_installment, clientId } = req;
+    const { amount, no_of_installment, clientId, installment_schedule_percent } = req;
     if (!amount || !no_of_installment) {
       return res.status(400).json({ message: 'Amount and number of installments are required' });
     }
@@ -50,13 +51,17 @@ export class PaymentController {
     if (no_of_installment > 12) {
       return res.status(400).json({ message: 'Number of installments cannot exceed 12' });
     }
+    
+    if (no_of_installment != installment_schedule_percent.length) throw new BadRequestException("Number of installments and schedule percent length must be equal");
     // Assuming you have a service method to create the payment intent
+    if (installment_schedule_percent.every(x => x < 0 || x > 100)) throw new BadRequestException("Installment schedule percent must be between 0 and 100");
+    if (installment_schedule_percent.reduce((a, b) => a + b) != 100) throw new BadRequestException("Installment schedule percent must sum to 100");
     
     const doc = await this.docEnvService.findById(clientId);
     if (!doc) throw new NotFoundException(`Document with ID ${clientId} not found`);
     
     const payment = await this.paymentService.createPayment({ amount, installments: no_of_installment, clientId });
-    const paymentIntents  = await this.paymentService.createPaymentIntent({ amount, installments: no_of_installment,  clientId, paymentId: payment.id } );
+    const paymentIntents  = await this.paymentService.createPaymentIntent({ amount, installments: no_of_installment, installment_schedule_percent, clientId, paymentId: payment.id } );
 
     let installmentDoc: any[] = [];
     for (const paymentIntent of paymentIntents) {
@@ -80,7 +85,8 @@ export class PaymentController {
     const paymentId: string = req.query.paymentId as string;
     if (!paymentId) return;
     const payment = await this.paymentService.trackPaymentInstallment({ paymentId });
-    if (!payment) await this.paymentService.updatePaymentStatus({ paymentId });
+    if (!payment) await this.paymentService.updatePaymentStatus({ paymentId, status: PaymentStatus.COMPLETED });
+    else await this.paymentService.updatePaymentStatus({ paymentId, status: PaymentStatus.PROCESSING });
     
     res.redirect('https://www.google.com');
   }

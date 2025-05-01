@@ -1,11 +1,13 @@
 import { Injectable, Query } from '@nestjs/common';
-import { CreateDocEnvDto } from './dto/create-doc_env.dto';
+import { CreateDocEnvDto, QueryDto } from './dto/create-doc_env.dto';
 import { UpdateDocEnvDto } from './dto/update-doc_env.dto';
 import { DocEnv, Status } from './entities/doc_env.entity';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { MailerService } from '@nestjs-modules/mailer';
 import { MailerserviceService } from '../mailerservice/mailerservice.service';
+import { PaginationReqDto } from '../utils/dto/pagination-req.dto';
+import { PaginatedResultDto } from '../utils/dto/paginated-result.dto';
 
 @Injectable()
 export class DocEnvService {
@@ -25,8 +27,30 @@ export class DocEnvService {
     return doc;
   }
 
-  async findAll(query: { [key: string]: any }): Promise<DocEnv[]> {
-    return await this.docEnvModel.find(query).exec();
+  async findAll(paginationReqDto: PaginationReqDto<DocEnv>): Promise<PaginatedResultDto> {
+    const { limit = 10, cursor, order = 'DESC', cursorField = '_id' } = paginationReqDto;
+    const sortOrder = order === 'ASC' ? 1 : -1;
+
+    const filter: any = cursor
+      ? { [cursorField]: { [sortOrder === 1 ? '$gt' : '$lt']: cursor } }
+      : {};
+
+    console.log(filter)
+    const res = await this.docEnvModel
+      .find({ ...filter })
+      .sort({ [cursorField]: sortOrder as 1 | -1 })
+      .limit(limit+1)
+      .exec();  
+    
+    const nextCursor = res.length > limit ? res.pop() : null;
+    
+    return {
+      data: res,
+      hasNextPage: !!nextCursor,
+      nextCursor: nextCursor ? nextCursor[cursorField] : null,
+      previousCursor: cursor,
+    }
+  
   }
 
   async findOne(email: string) {

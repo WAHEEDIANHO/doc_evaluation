@@ -7,6 +7,7 @@ import { DocEnvModule } from './doc_env/doc_env.module';
 import { FileUploadModule } from './file-upload/file-upload.module';
 import { AuthModule } from './auth/auth.module';
 import { PaymentModule } from './payment/payment.module';
+import { TestimonialModule } from './testimonial/testimonial.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -21,7 +22,7 @@ import { PaymentModule } from './payment/payment.module';
     })
   }), 
     DocEnvModule, 
-    FileUploadModule, AuthModule, PaymentModule, PaymentModule
+    FileUploadModule, AuthModule, PaymentModule, PaymentModule, TestimonialModule
     // UserModule
     // MailerserviceModule,
     // MailerModule

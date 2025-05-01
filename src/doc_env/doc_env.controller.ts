@@ -19,8 +19,9 @@ import { ValidationPipe } from '../validation.pipe';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { UpdateDocEnvDto } from './dto/update-doc_env.dto';
-import { Status } from './entities/doc_env.entity';
+import { DocEnv, Status } from './entities/doc_env.entity';
 import { AppResponseDto } from '../app.response.dto';
+import { PaginationReqDto } from '../utils/dto/pagination-req.dto';
 
 
 @Controller('doc-env')
@@ -36,11 +37,17 @@ export class DocEnvController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @ApiQuery({type: QueryDto})
+    @UseGuards(AuthGuard)
+  // @ApiQuery({type: QueryDto})
   @Get()
-  async findAll(@Res() res: Response, @Query() query: Record<string, string>): Promise<Response> {
-    const docs = await this.docEnvService.findAll(query);
+  async findAll(
+    @Query() paginationReqDto: PaginationReqDto<DocEnv>, 
+    // @Query() query: QueryDto, 
+    @Res() res: Response): Promise<Response> 
+  {
+    // console.log(query, "que")
+    // console.log(paginationReqDto, "pag")
+    const docs = await this.docEnvService.findAll(paginationReqDto);
     return res.status(HttpStatus.OK).json(docs)
   }
 

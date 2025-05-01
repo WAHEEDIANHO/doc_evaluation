@@ -6,6 +6,7 @@ import { Request } from 'express';
 export type GenerateInstallmentLinksProps = {
   amount: number;
   installments: number;
+  installment_schedule_percent: Array<number>;
   clientId: string;
   paymentId: string;
 }
@@ -26,12 +27,13 @@ export class StripeService {
     });
   }
 
-  async generateInstallmentLinks({ amount, installments, clientId, paymentId }: GenerateInstallmentLinksProps): Promise<PaymentLink[]> {
+  async generateInstallmentLinks({ amount, installments, installment_schedule_percent, clientId, paymentId }: GenerateInstallmentLinksProps): Promise<PaymentLink[]> {
     if (installments < 1) {
       throw new BadRequestException('Installments must be at least 1');
     }
 
-    const installmentAmount: number = Number((amount / installments).toFixed(2)); // Round up for accuracy
+    
+    const installmentAmount: (percent: number) => number = (percent: number): number =>  Number((amount * (percent/100)).toFixed(2)); // Round up for accuracy
     const paymentLinks: PaymentLink[] = [];
 
     for (let i = 0; i < installments; i++) {
@@ -45,7 +47,7 @@ export class StripeService {
               product_data: {
                 name: `Installment Payment ${i + 1}/${installments}`,
               },
-              unit_amount: installmentAmount * 100, // Convert to cents
+              unit_amount: installmentAmount(installment_schedule_percent[i]) * 100, // Convert to cents
             },
             quantity: 1,
           },

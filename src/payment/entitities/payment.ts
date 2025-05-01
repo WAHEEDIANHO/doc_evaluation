@@ -7,6 +7,7 @@ export type PaymentDocument = HydratedDocument<Payment>;
 
 export enum   PaymentStatus {
   PENDING = "PENDING",
+  PROCESSING = "PROCESSING",
   COMPLETED = "COMPLETED",
 }
 

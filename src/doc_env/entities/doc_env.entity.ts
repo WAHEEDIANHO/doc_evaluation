@@ -63,6 +63,11 @@ export class DocEnv {
   performed_leading_role: boolean
   @Prop({type: String, enum: Object.values(Status), default: Status.PENDING})
   status: Status
+  
+  @Prop({type: Date, default: Date.now})
+  createdAt: Date = new Date(Date.now())
+  @Prop({type: Date, default: Date.now})
+  updatedAt: Date = new Date(Date.now())
 }
 
 

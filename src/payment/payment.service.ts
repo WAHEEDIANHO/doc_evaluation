@@ -27,9 +27,11 @@ export class PaymentService {
     @InjectModel(Installment.name) private installmentModel: Model<Installment>,
     private readonly configService: ConfigService,
   ) {}
-  async createPaymentIntent({ amount, installments, clientId, paymentId }: GenerateInstallmentLinksProps): Promise<PaymentLink[]> {
+  async createPaymentIntent({ amount, installments, installment_schedule_percent, clientId, paymentId }: GenerateInstallmentLinksProps): Promise<PaymentLink[]> {
     try {
-      const paymentIntent = await this.stripeService.generateInstallmentLinks({ amount, installments, clientId, paymentId });
+      const paymentIntent = await this.stripeService.generateInstallmentLinks({
+        installment_schedule_percent,
+        amount, installments, clientId, paymentId });
       return paymentIntent;
     } catch (error: Error | any) {
       throw new Error(`Failed to create payment intent: ${error?.message}`);
@@ -42,7 +44,7 @@ export class PaymentService {
     return savedPayment;
   }
   
-  async createPayment({ amount, installments, clientId }: CreatePaymentProp): Promise<PaymentDocument> {
+  async createPayment({ amount, installments,  clientId }: CreatePaymentProp): Promise<PaymentDocument> {
     try {
       return  await this.paymentModel.create({ amount, no_of_installment: installments, clientId });
     } catch (error: Error | any) {
@@ -117,13 +119,13 @@ export class PaymentService {
     }
   }
   
-  async trackPaymentInstallment({ paymentId }: TrackPaymentInstallmentProp): Promise<boolean> {
+  async   trackPaymentInstallment({ paymentId }: TrackPaymentInstallmentProp): Promise<boolean> {
    const availableDocs = await this.installmentModel.countDocuments({ payment: paymentId, status: InstallmentStatus.Pending }).exec();   
    return availableDocs > 0;
   }
   
-  async updatePaymentStatus({ paymentId }: { paymentId: string }):   Promise<PaymentDocument | null> {
-      return await this.paymentModel.findByIdAndUpdate(paymentId, {status: PaymentStatus.COMPLETED}).exec();
+  async updatePaymentStatus({ paymentId, status }: { paymentId: string, status: PaymentStatus }):   Promise<PaymentDocument | null> {
+      return await this.paymentModel.findByIdAndUpdate(paymentId, {status}).exec();
   }
 
   async getPaymentInstallments(paymentId: string) {
