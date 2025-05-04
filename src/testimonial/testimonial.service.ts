@@ -5,7 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Testimonial } from './entities/testimonial.entity';
 import { Model } from 'mongoose';
 import { PaginationReqDto } from '../utils/dto/pagination-req.dto';
-import { DocEnv } from '../doc_env/entities/doc_env.entity';
+import { DocEnv, Status } from '../doc_env/entities/doc_env.entity';
 import { PaginatedResultDto } from '../utils/dto/paginated-result.dto';
 
 @Injectable()
@@ -60,6 +60,20 @@ export class TestimonialService {
 
   async update(id: string, updateTestimonialDto: UpdateTestimonialDto): Promise<void> {
     await this.testimonialModel.findByIdAndUpdate(id, { status: updateTestimonialDto.status }).exec();
+  }
+  
+  async bulkUpdate(updateTestimonialDto: UpdateTestimonialDto): Promise<any> {
+    const errors: { id: string; error: any }[] = [];
+
+    for (const id of updateTestimonialDto.testimonialIds) {
+      try {
+        await this.testimonialModel.findByIdAndUpdate(id, { status: Status.PROCESSING });
+      } catch (error: any) {
+        errors.push({ id, error: error?.message });
+      }
+    }
+
+    return errors;
   }
 
   async remove(id: string): Promise<void> {

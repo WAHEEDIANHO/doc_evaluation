@@ -21,6 +21,7 @@ import { DocEnvService } from '../doc_env/doc_env.service';
 import { ApiBearerAuth, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { PaymentStatus } from './entitities/payment';
+import { Status } from '../doc_env/entities/doc_env.entity';
 
 
 
@@ -31,7 +32,7 @@ export class PaymentController {
     private readonly paymentService: PaymentService,
     private readonly mailService: MailerserviceService,
     private readonly docEnvService: DocEnvService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
     ) {}
 
   @ApiBearerAuth()
@@ -86,7 +87,11 @@ export class PaymentController {
     if (!paymentId) return;
     const payment = await this.paymentService.trackPaymentInstallment({ paymentId });
     if (!payment) await this.paymentService.updatePaymentStatus({ paymentId, status: PaymentStatus.COMPLETED });
-    else await this.paymentService.updatePaymentStatus({ paymentId, status: PaymentStatus.PROCESSING });
+    else{
+      await this.paymentService.updatePaymentStatus({ paymentId, status: PaymentStatus.PROCESSING });
+      const client = await this.paymentService.getPaymentById(paymentId);
+      await this.docEnvService.update(client.clientId.toString(), { status: Status.PROCESSING })
+    } 
     
     res.redirect('https://www.google.com');
   }

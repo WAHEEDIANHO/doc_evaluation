@@ -39,6 +39,18 @@ export class TestimonialController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @Patch('bulk-update')
+  async bulkUpdate(@Body(new ValidationPipe()) updateTestimonialDto: UpdateTestimonialDto, @Res() res: Response): Promise<Response> {
+    const isAllUpdate = await this.testimonialService.bulkUpdate(updateTestimonialDto);
+    if (isAllUpdate.length > 0) 
+    {
+      return res.status(HttpStatus.BAD_REQUEST).json({data: isAllUpdate})
+    }
+    return res.status(HttpStatus.OK).json({message: 'successfully update testimonials'});
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.testimonialService.remove(id);

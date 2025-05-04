@@ -22,6 +22,7 @@ import { UpdateDocEnvDto } from './dto/update-doc_env.dto';
 import { DocEnv, Status } from './entities/doc_env.entity';
 import { AppResponseDto } from '../app.response.dto';
 import { PaginationReqDto } from '../utils/dto/pagination-req.dto';
+import { DocEnvQueryDto } from './dto/doc-env-query-dto';
 
 
 @Controller('doc-env')
@@ -41,7 +42,7 @@ export class DocEnvController {
   // @ApiQuery({type: QueryDto})
   @Get()
   async findAll(
-    @Query() paginationReqDto: PaginationReqDto<DocEnv>, 
+    @Query() paginationReqDto: DocEnvQueryDto, 
     // @Query() query: QueryDto, 
     @Res() res: Response): Promise<Response> 
   {

@@ -135,6 +135,10 @@ export class PaymentService {
   async getInstallmentById(installmentId: string) {
     return await this.installmentModel.findById(installmentId).exec();
   }
+
+  async getPaymentById(paymentId: string) {
+    return await this.paymentModel.findById(paymentId).exec();
+  }
   
   async getPaymentByDocId(docId: string) {
     return await this.paymentModel.findOne({ clientId: docId }).exec();

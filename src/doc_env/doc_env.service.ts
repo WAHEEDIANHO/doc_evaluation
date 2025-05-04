@@ -29,6 +29,8 @@ export class DocEnvService {
 
   async findAll(paginationReqDto: PaginationReqDto<DocEnv>): Promise<PaginatedResultDto> {
     const { limit = 10, cursor, order = 'DESC', cursorField = '_id' } = paginationReqDto;
+    
+    ['cursor', 'limit', 'order', 'cursorField'].forEach(key => delete paginationReqDto[key]);
     const sortOrder = order === 'ASC' ? 1 : -1;
 
     const filter: any = cursor
@@ -37,7 +39,7 @@ export class DocEnvService {
 
     console.log(filter)
     const res = await this.docEnvModel
-      .find({ ...filter })
+      .find({ ...paginationReqDto, ...filter })
       .sort({ [cursorField]: sortOrder as 1 | -1 })
       .limit(limit+1)
       .exec();  
