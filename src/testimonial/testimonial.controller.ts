@@ -1,12 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { TestimonialService } from './testimonial.service';
 import { CreateTestimonialDto } from './dto/create-testimonial.dto';
-import { UpdateTestimonialDto } from './dto/update-testimonial.dto';
+import { UpdateBulkTestimonialDto } from './dto/update-bulk-testimonial.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ValidationPipe } from '../utils/validation.pipe';
 import { TestimonialQueryDto } from './dto/testimonial-query.dto';
 import { Response } from 'express';
 import { AuthGuard } from '../auth/auth.guard';
+import { UpdateSingleTestimonialDto } from './dto/update-single-testimonial.dto';
 
 
 @ApiTags("Testmonial")
@@ -33,14 +34,14 @@ export class TestimonialController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body(new ValidationPipe()) updateTestimonialDto: UpdateTestimonialDto) {
+  update(@Param('id') id: string, @Body(new ValidationPipe()) updateTestimonialDto: UpdateSingleTestimonialDto) {
     return this.testimonialService.update(id, updateTestimonialDto);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Patch('bulk-update')
-  async bulkUpdate(@Body(new ValidationPipe()) updateTestimonialDto: UpdateTestimonialDto, @Res() res: Response): Promise<Response> {
+  async bulkUpdate(@Body(new ValidationPipe()) updateTestimonialDto: UpdateBulkTestimonialDto, @Res() res: Response): Promise<Response> {
     const isAllUpdate = await this.testimonialService.bulkUpdate(updateTestimonialDto);
     if (isAllUpdate.length > 0) 
     {

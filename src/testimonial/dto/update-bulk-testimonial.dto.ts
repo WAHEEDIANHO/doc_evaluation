@@ -3,7 +3,7 @@ import { CreateTestimonialDto } from './create-testimonial.dto';
 import { TestimonialStatus } from '../entities/testimonial.entity';
 import { ArrayNotEmpty, IsArray, IsEnum, IsNumber, IsString } from 'class-validator';
 
-export class UpdateTestimonialDto 
+export class UpdateBulkTestimonialDto 
 {
   @ApiProperty()
   @IsArray()
