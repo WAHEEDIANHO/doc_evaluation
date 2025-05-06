@@ -27,7 +27,7 @@ export class TestimonialService {
   }
 
   async findAll(query: PaginationReqDto<DocEnv>): Promise<PaginatedResultDto> {
-    const { limit = 10, cursor, order = 'DESC', cursorField = '_id' } = query;
+    const { limit = 10, cursor, order = 'DESC', cursorField = 'createdAt' } = query;
     
     ['cursor', 'limit', 'order', 'cursorField'].forEach(key => delete query[key]);
     
