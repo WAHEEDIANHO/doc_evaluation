@@ -2,13 +2,13 @@ import { Injectable, Query } from '@nestjs/common';
 import { CreateDocEnvDto, QueryDto } from './dto/create-doc_env.dto';
 import { UpdateDocEnvDto } from './dto/update-doc_env.dto';
 import { DocEnv, Status } from './entities/doc_env.entity';
-import { Model } from 'mongoose';
+import { Model, Schema } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { MailerService } from '@nestjs-modules/mailer';
 import { MailerserviceService } from '../mailerservice/mailerservice.service';
 import { PaginationReqDto } from '../utils/dto/pagination-req.dto';
 import { PaginatedResultDto } from '../utils/dto/paginated-result.dto';
-
+import { Types } from 'mongoose';
 @Injectable()
 export class DocEnvService {
   
@@ -34,7 +34,7 @@ export class DocEnvService {
     const sortOrder = order === 'ASC' ? 1 : -1;
 
     const filter: any = cursor
-      ? { [cursorField]: { [sortOrder === 1 ? '$gt' : '$lt']: cursor } }
+      ? { [cursorField]: { [sortOrder === 1 ? '$gte' : '$lte']:  Types.ObjectId.createFromHexString(cursor) } }
       : {};
 
     console.log(filter)

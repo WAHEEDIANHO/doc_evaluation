@@ -34,7 +34,7 @@ export class TestimonialService {
     const sortOrder = order === 'ASC' ? 1 : -1;
 
     const filter: any = cursor
-      ? { [cursorField]: { [sortOrder === 1 ? '$gt' : '$lt']: cursor } }
+      ? { [cursorField]: { [sortOrder === 1 ? '$gte' : '$lte']: cursor } }
       : {};
 
     console.log(filter)
