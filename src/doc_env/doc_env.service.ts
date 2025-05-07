@@ -1,14 +1,12 @@
-import { Injectable, Query } from '@nestjs/common';
-import { CreateDocEnvDto, QueryDto } from './dto/create-doc_env.dto';
-import { UpdateDocEnvDto } from './dto/update-doc_env.dto';
+import { Injectable } from '@nestjs/common';
+import { CreateDocEnvDto } from './dto/create-doc_env.dto';
 import { DocEnv, Status } from './entities/doc_env.entity';
-import { Model, Schema } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { MailerService } from '@nestjs-modules/mailer';
 import { MailerserviceService } from '../mailerservice/mailerservice.service';
-import { PaginationReqDto } from '../utils/dto/pagination-req.dto';
 import { PaginatedResultDto } from '../utils/dto/paginated-result.dto';
-import { Types } from 'mongoose';
+import { PaginationReqDto } from '../utils/dto/pagination-req.dto';
+
 @Injectable()
 export class DocEnvService {
   
@@ -29,31 +27,70 @@ export class DocEnvService {
 
   async findAll(paginationReqDto: PaginationReqDto<DocEnv>): Promise<PaginatedResultDto> {
     const { limit = 10, cursor, order = 'DESC', cursorField = '_id' } = paginationReqDto;
-    
+
     ['cursor', 'limit', 'order', 'cursorField'].forEach(key => delete paginationReqDto[key]);
     const sortOrder = order === 'ASC' ? 1 : -1;
 
     const filter: any = cursor
-      ? { [cursorField]: { [sortOrder === 1 ? '$gte' : '$lte']:  Types.ObjectId.createFromHexString(cursor) } }
+      ? { [cursorField]: { [sortOrder === 1 ? '$gt' : '$lt']: Types.ObjectId.createFromHexString(cursor) } }
       : {};
 
-    console.log(filter)
     const res = await this.docEnvModel
       .find({ ...paginationReqDto, ...filter })
       .sort({ [cursorField]: sortOrder as 1 | -1 })
-      .limit(limit+1)
-      .exec();  
-    
-    const nextCursor = res.length > limit ? res.pop() : null;
-    
-    return {
-      data: res,
-      hasNextPage: !!nextCursor,
-      nextCursor: nextCursor ? nextCursor[cursorField] : null,
-      previousCursor: cursor,
+      .limit(limit + 1)
+      .exec();
+
+    let hasNextPage = false;
+    let hasPreviousPage = false;
+    let nextCursor = null;
+    let previousCursor = null;
+    let data = res;
+
+    // console.log(order, "order is ", order == 'ASC')
+    if (order == 'ASC') {
+      if (res.length > limit) {
+        hasPreviousPage = true;
+        data = res.slice(0, limit);
+        // console.log(data)
+        previousCursor = hasPreviousPage ? data[data.length - 1][cursorField] : null;
+      } else if (res.length > 0) {
+        previousCursor = hasPreviousPage ? data[data.length - 1][cursorField] : null;
+      }
+
+      if (data.length > 0) {
+        nextCursor = !!cursor ? data[0][cursorField] : null;
+        hasNextPage = !!cursor;
+      }
+      
+      data = data.reverse()
     }
-  
+    
+    else {
+      if (res.length > limit) {
+        hasNextPage = true;
+        data = res.slice(0, limit);
+        nextCursor = hasNextPage ? data[data.length - 1][cursorField] : null;
+      } else if (res.length > 0) {
+        nextCursor = hasNextPage ? data[data.length - 1][cursorField] : null;
+      }
+
+      if (data.length > 0) {
+        previousCursor = !!cursor ? data[0][cursorField] : null;
+        hasPreviousPage = !!cursor;
+      }  
+    }
+    
+
+    return {
+      data,
+      hasNextPage,
+      hasPreviousPage,
+      nextCursor,
+      previousCursor,
+    };
   }
+
 
   async findOne(email: string) {
     return await this.docEnvModel.findOne({email}).exec();

@@ -7,6 +7,7 @@ enum SortOrder {
   DESC = 'DESC',
 }
 
+
 export class PaginationReqDto<T extends any> {
   @ApiProperty({ required: false })
   @IsNumber()
@@ -24,4 +25,5 @@ export class PaginationReqDto<T extends any> {
   @ApiProperty({ required: false })
   @IsString()
   cursorField?: string;
+  
 }
