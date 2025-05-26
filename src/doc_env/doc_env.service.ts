@@ -20,7 +20,7 @@ export class DocEnvService {
     const doc_env =  new this.docEnvModel(createDocEnvDto);
     const doc: any = await doc_env.save();
     // console.log(doc.email)
-    this.mailerService.sendMail(doc._id);
+    // this.mailerService.sendMail(doc._id);
     this.mailerService.submissionConfirmationLink(doc._id, {email: doc.email});
     return doc;
   }
