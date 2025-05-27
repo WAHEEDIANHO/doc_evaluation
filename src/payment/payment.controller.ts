@@ -75,7 +75,7 @@ export class PaymentController {
     // })
     //
     
-    this.mailService.sendPaymentLink(doc.email, installmentDoc);
+    this.mailService.sendPaymentLink("elitepetitions25@gmail.com", installmentDoc);
     console.log(installmentDoc)
     return res.status(200).json({ message: 'Installment created', data: installmentDoc });
   }
