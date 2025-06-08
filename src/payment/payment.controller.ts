@@ -90,7 +90,7 @@ export class PaymentController {
     else{
       await this.paymentService.updatePaymentStatus({ paymentId, status: PaymentStatus.PROCESSING });
       const client = await this.paymentService.getPaymentById(paymentId);
-      await this.docEnvService.update(client.clientId.toString(), { status: Status.PROCESSING })
+      await this.docEnvService.update(client.clientId.toString(), { status: Status.REVIEWED })
     } 
     
     res.redirect('https://www.google.com');

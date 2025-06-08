@@ -7,9 +7,9 @@ import { Type } from 'class-transformer';
 
 export class DocEnvQueryDto extends PaginationReqDto<DocEnv> {
 
-  @ApiProperty({ enum: Status, required: false })
-  @IsEnum(Status, {message: "value must be one of the following: PENDING, PROCESSING, APPROVED, REJECTED"})
-  status: Status;
+  @ApiProperty({ enum: [0,1,2,3,4], required: false })
+  @IsEnum(Status, {message: "value must be one of the following: 0 -> Pending, 1 -> Submission Review, 2 -> Agreement Signed, 3-> Payment received, 4 -> Task Completed"})
+  status: number | Status;
 
   @ApiProperty({ required: false })
   @IsString()

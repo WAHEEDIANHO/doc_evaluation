@@ -105,13 +105,13 @@ export class DocEnvService {
     if(doc == null) return;
     await this.docEnvModel.findByIdAndUpdate(id, {status: updateDocEnvDto.status}).exec();
     // console.log(updateDocEnvDto.status, Status.APPROVED.toString())
-    if (updateDocEnvDto.status == Status.APPROVED) {
-      console.log("update")
-      // this.mailerService.sendMail(doc.email);
-      this.mailerService.sendConfirmationMail(id,  {email: doc.email});
-    }else if (updateDocEnvDto.status == Status.REJECTED) {
-      console.log("rejected");
-    }
+    // if (updateDocEnvDto.status == Status.APPROVED) {
+    //   console.log("update")
+    //   // this.mailerService.sendMail(doc.email);
+    //   this.mailerService.sendConfirmationMail(id,  {email: doc.email});
+    // }else if (updateDocEnvDto.status == Status.REJECTED) {
+    //   console.log("rejected");
+    // }
     return;
     // return `This action updates a #${id} docEnv`;
   }

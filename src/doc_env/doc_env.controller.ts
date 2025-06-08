@@ -46,8 +46,8 @@ export class DocEnvController {
     // @Query() query: QueryDto, 
     @Res() res: Response): Promise<Response> 
   {
-    // console.log(query, "que")
-    // console.log(paginationReqDto, "pag")
+
+    if (paginationReqDto.status) paginationReqDto.status = Object.keys(Status)[paginationReqDto.status]
     const docs = await this.docEnvService.findAll(paginationReqDto);
     return res.status(HttpStatus.OK).json(docs)
   }
@@ -73,7 +73,7 @@ export class DocEnvController {
     @Body() updateDocEnvDto: UpdateDocEnvDto,
     @Res() res: Response
   ) {
-    if (updateDocEnvDto.status > 2 || updateDocEnvDto.status < 0) throw new BadRequestException('Invalid status value');
+    if (updateDocEnvDto.status > 4 || updateDocEnvDto.status < 0) throw new BadRequestException('Invalid status value');
     await this.docEnvService.update(id, { status: Object.keys(Status)[updateDocEnvDto.status] });
     this._res.message = 'updated successfully';
     this._res.status = HttpStatus.OK;

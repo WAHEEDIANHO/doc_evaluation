@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTestimonialDto } from './dto/create-testimonial.dto';
 import { UpdateBulkTestimonialDto } from './dto/update-bulk-testimonial.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Testimonial } from './entities/testimonial.entity';
+import { Testimonial, TestimonialStatus } from './entities/testimonial.entity';
 import { Model } from 'mongoose';
 import { PaginationReqDto } from '../utils/dto/pagination-req.dto';
 import { DocEnv, Status } from '../doc_env/entities/doc_env.entity';
@@ -68,7 +68,7 @@ export class TestimonialService {
 
     for (const id of updateTestimonialDto.testimonialIds) {
       try {
-        await this.testimonialModel.findByIdAndUpdate(id, { status: Status.PROCESSING });
+        await this.testimonialModel.findByIdAndUpdate(id, { status: updateTestimonialDto.status });
       } catch (error: any) {
         errors.push({ id, error: error?.message });
       }
